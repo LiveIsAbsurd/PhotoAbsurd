@@ -175,8 +175,11 @@ export async function authenticateUser(username, password) {
     body: JSON.stringify({ username, password }),
   });
   if (!apiResponse.ok) {
+    if (apiResponse.status >= 500) {
+      throw new Error(`Ошибка сервера (${apiResponse.status} Bad Gateway). Бэкенд недоступен.`);
+    }
     const errorPayload = await apiResponse.json().catch(() => ({}));
-    throw new Error(errorPayload.error || 'Неверный логин или пароль');
+    throw new Error(errorPayload.error || (apiResponse.status === 401 ? 'Неверный логин или пароль' : `Ошибка запроса (${apiResponse.status})`));
   }
   return apiResponse.json();
 }
