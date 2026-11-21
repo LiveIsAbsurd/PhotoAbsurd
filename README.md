@@ -33,7 +33,7 @@
 - 🔐 **Безопасность корпоративного уровня:**
   - Аутентификация через **JWT** в защищённых `HttpOnly; SameSite=Lax; Secure` cookies.
   - Мгновенный отзыв токенов при выходе (Blacklist в базе данных).
-  - Автоматическая инициализация и синхронизация учетной записи администратора из `.env` (`ADMIN_USERNAME` / `ADMIN_PASSWORD`).
+  - Автоматическая инициализация учётной записи администратора из `.env` при первом запуске (`ADMIN_USERNAME` / `ADMIN_PASSWORD`).
   - Глобальный сброс сессий пользователя при изменении пароля администратором через версионирование токенов (`token_version`).
   - Пароли хэшируются **bcrypt (cost 12)** с защитой от атак по времени (Timing Attack mitigation).
   - Аппаратный Rate Limiting на уровне Nginx против брутфорс-атак на эндпоинты входа.
@@ -119,7 +119,7 @@ PhotoService/
 | `APP_PORT` | `80` (локально) / `8080` (прод) | Порт Nginx, пробрасываемый на хост |
 | `APP_BIND_IP` | `0.0.0.0` (локально) / `127.0.0.1` | Сетевой интерфейс привязки портов |
 | `ADMIN_USERNAME` | `admin` | Логин начального администратора |
-| `ADMIN_PASSWORD` | `admin123` | Пароль администратора (синхронизируется с БД при старте) |
+| `ADMIN_PASSWORD` | `admin123` | Пароль администратора (применяется при создании, если аккаунта ещё нет в БД) |
 | `JWT_SECRET` | `photogallery_...` | Секретный ключ подписи JWT (от 32 символов) |
 | `COOKIE_SECURE` | `false` (локально) / `true` (HTTPS) | Флаг Secure для сессионных кук |
 | `UPLOAD_DIR` | `/uploads` | Внутренний каталог хранения снимков в контейнере |
@@ -232,12 +232,11 @@ sudo docker compose up --build -d
   ```bash
   sudo docker compose exec postgres psql -U photouser -d photogallery -c "SELECT id, username, role, created_at FROM users;"
   ```
-- **Сбросить пароль администратора:**
-  Измените `ADMIN_PASSWORD` в файле `.env` и примените изменения:
+- **Сбросить пароль администратора (через базу данных):**
   ```bash
-  sudo docker compose up -d backend
+  sudo docker compose exec postgres psql -U photouser -d photogallery -c "UPDATE users SET password_hash = crypt('НОВЫЙ_ПАРОЛЬ', gen_salt('bf', 12)) WHERE username = 'ВАШ_ЛОГИН';"
   ```
-  *(Бэкенд автоматически проверит и обновит хеш пароля в базе данных при старте).*
+  *(Смена пароля через веб-панель управления сохраняется навсегда и не сбрасывается при перезапусках контейнеров).*
 
 ---
 

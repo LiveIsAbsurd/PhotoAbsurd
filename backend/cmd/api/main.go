@@ -205,15 +205,8 @@ func initAdminAccount(ctx context.Context, userRepo *repository.UserRepository, 
 
 	existingUser, err := userRepo.GetByUsername(ctx, adminUsername)
 	if err == nil && existingUser != nil {
-		// Если пароль в базе не совпадает с ADMIN_PASSWORD из .env, обновляем его
-		if !authService.CheckPassword(adminPassword, existingUser.PasswordHash) {
-			newHash, hashErr := authService.HashPassword(adminPassword)
-			if hashErr == nil {
-				if updateErr := userRepo.UpdatePassword(ctx, existingUser.ID, newHash); updateErr == nil {
-					log.Printf("[SECURITY] Пароль администратора %s успешно обновлен из переменной ADMIN_PASSWORD", adminUsername)
-				}
-			}
-		}
+		// Пользователь уже существует — не перезаписываем пароль,
+		// чтобы не сбрасывать пароль при изменении его через веб-интерфейс
 		return
 	}
 
