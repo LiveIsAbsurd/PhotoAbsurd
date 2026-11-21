@@ -6,12 +6,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.2.0-black?style=for-the-badge" alt="Version 1.2.0">
+  <img src="https://img.shields.io/badge/version-1.3.0-black?style=for-the-badge" alt="Version 1.3.0">
   <img src="https://img.shields.io/badge/Go-1.22-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go 1.22">
   <img src="https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 18">
-  <img src="https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 5">
   <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL 16">
-  <img src="https://img.shields.io/badge/Nginx-Alpine-009639?style=for-the-badge&logo=nginx&logoColor=white" alt="Nginx">
+  <img src="https://img.shields.io/badge/Nginx-Latest-009639?style=for-the-badge&logo=nginx&logoColor=white" alt="Nginx">
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 </p>
 
@@ -34,9 +33,11 @@
 - 🔐 **Безопасность корпоративного уровня:**
   - Аутентификация через **JWT** в защищённых `HttpOnly; SameSite=Lax; Secure` cookies.
   - Мгновенный отзыв токенов при выходе (Blacklist в базе данных).
+  - Автоматическая инициализация и синхронизация учетной записи администратора из `.env` (`ADMIN_USERNAME` / `ADMIN_PASSWORD`).
   - Глобальный сброс сессий пользователя при изменении пароля администратором через версионирование токенов (`token_version`).
   - Пароли хэшируются **bcrypt (cost 12)** с защитой от атак по времени (Timing Attack mitigation).
   - Аппаратный Rate Limiting на уровне Nginx против брутфорс-атак на эндпоинты входа.
+  - Чистая база без тестовых/демонстрационных учетных записей.
 - 💾 **Гибкость хранилища:**
   - Поддержка монтирования хранилища фотографий на отдельный физический диск или сетевой раздел через переменную окружения `PHOTOS_STORAGE_PATH`.
 
@@ -48,11 +49,12 @@
 - **Ядро:** [React 18](https://react.dev/), [Vite 5](https://vitejs.dev/)
 - **Стилизация:** SCSS (CSS Modules), CSS Custom Properties для бесшовной смены тем (Light / Dark)
 - **Иконки:** [Lucide React](https://lucide.dev/)
-- **Особенности:** Zero-dependency подход (без тяжелых UI-фреймворков), нативный History API, адаптивная верстка (Mobile / Tablet / Desktop / Ultra-wide).
+- **Особенности:** Zero-dependency подход, адаптивная верстка (Mobile / Tablet / Desktop / Ultra-wide).
+- **Сборка:** Скомпилированный продакшн-билд (`frontend/dist`) хранится в репозитории — на сервере **не требуются** Node.js и npm.
 
 ### Backend
 - **Язык:** [Go 1.22](https://go.dev/)
-- **Роутер:** [go-chi/chi v5](https://github.com/go-chi/chi) — сверхбыстрый и легковесный HTTP-маршрутизатор
+- **Роутер:** [go-chi/chi v5](https://github.com/go-chi/chi) — быстрый и легковесный HTTP-маршрутизатор
 - **Работа с изображениями:** [imaging](https://github.com/disintegration/imaging), [chai2010/webp](https://github.com/chai2010/webp)
 - **EXIF-парсер:** [rwcarlsen/goexif](https://github.com/rwcarlsen/goexif)
 - **Токены:** [golang-jwt/jwt v5](https://github.com/golang-jwt/jwt)
@@ -60,15 +62,18 @@
 
 ### База данных
 - **СУБД:** [PostgreSQL 16](https://www.postgresql.org/)
-- **Драйвер:** [pgx v5](https://github.com/jackc/pgx) с использованием постоянного пула соединений (`pgxpool`)
-- **Миграции:** версионированные SQL-миграции с автоматическим накатыванием при старте сервиса.
+- **Драйвер:** [pgx v5](https://github.com/jackc/pgx) с пулом соединений (`pgxpool`)
+- **Миграции:** версионированные SQL-миграции с автоматическим накатыванием и очисткой устаревших демо-данных.
 
 ### Инфраструктура и доставка
-- **Docker & Docker Compose:** мультистейдж-сборка Go-бэкенда на базе легковесного Alpine Linux.
-- **Nginx Alpine:** 
-  - Раздача статики SPA с роутингом на `index.html`.
+- **Docker Compose:** изолированная среда из трёх сервисов:
+  - `photo_postgres` — база данных PostgreSQL 16 Alpine с постоянным volume `postgres_data`.
+  - `photo_backend` — скомпилированный Go REST API микросервис.
+  - `photo_nginx` — официальный образ `nginx:latest`, отдающий статику SPA, медиафайлы и проксирующий `/api/`.
+- **Nginx архитектура:**
+  - Внутренний DNS-резолвер (`resolver 127.0.0.11`) с динамическим апстримом предотвращает падение Nginx при старте или перезапуске бэкенда.
   - Прямой кэширующий стриминг медиафайлов из `/media/` с заголовками `Cache-Control: public, max-age=30d, immutable` в обход Go-бэкенда.
-  - Проксирование API-запросов (`/api/`) с поддержкой WebSocket/HTTP-upgrades и пробросом реальных IP (`set_real_ip_from`).
+  - Корректная поддержка SPA-роутинга (`try_files $uri $uri/ /index.html`).
 
 ---
 
@@ -79,53 +84,26 @@ PhotoService/
 ├── backend/
 │   ├── cmd/api/                 # Точка входа в приложение (main.go)
 │   ├── internal/
-│   │   ├── config/              # Загрузка и валидация переменных окружения
+│   │   ├── config/              # Загрузка и валидация конфигурации (.env)
 │   │   ├── handler/             # HTTP-контроллеры (auth, photo, album)
 │   │   ├── middleware/          # JWT-сессии, проверка прав и ролей (Admin/User)
 │   │   ├── model/               # Структуры данных и DTO
 │   │   ├── repository/          # SQL-запросы к PostgreSQL (pgxpool)
 │   │   └── service/             # Бизнес-логика (хеширование, обработка изображений)
 │   ├── migrations/              # SQL-миграции схемы БД
-│   └── Dockerfile               # Двухэтапная сборка бинарника Go
+│   └── Dockerfile               # Мультистейдж-сборка Go-бинарника
 ├── frontend/
-│   ├── src/
-│   │   ├── components/          # Компоненты UI (Header, PhotoGrid, Lightbox, Modals)
-│   │   ├── services/            # Модуль взаимодействия с API (fetch)
-│   │   └── styles/              # SCSS-переменные, типографика и глобальные стили
+│   ├── dist/                    # Скомпилированный production билд (монтируется в Nginx)
+│   ├── src/                     # Исходный код React-приложения
 │   ├── package.json
 │   └── vite.config.js
 ├── nginx/
-│   ├── default.conf             # Конфигурация виртуального хоста Nginx (SPA + Media + API)
+│   ├── default.conf             # Конфигурация виртуального хоста (SPA + Media + API)
 │   └── nginx.conf               # Глобальные параметры Nginx, gzip и зоны rate-limit
-├── docker-compose.yml           # Декларация контейнеров (Postgres, Backend, Nginx)
+├── docker-compose.yml           # Декларация сервисов (postgres, backend, photo_nginx)
 ├── .env.example                 # Шаблон переменных окружения
 └── README.md
 ```
-
----
-
-## 🚀 Быстрый старт (Локальная разработка)
-
-### Предварительные требования
-- Установленный [Docker](https://docs.docker.com/get-docker/) и [Docker Compose](https://docs.docker.com/compose/)
-*(Node.js на сервере не требуется — фронтенд и бэкенд компилируются внутри Docker-контейнеров).*
-
-### 1. Клонирование и настройка окружения
-```bash
-git clone <url-вашего-репозитория> PhotoService
-cd PhotoService
-
-# Создаём локальный .env файл
-cp .env.example .env
-```
-
-### 2. Запуск контейнеров
-```bash
-docker compose up --build -d
-```
-
-После завершения сборки галерея доступна в браузере по адресу:  
-👉 **`http://localhost`**
 
 ---
 
@@ -135,57 +113,70 @@ docker compose up --build -d
 | :--- | :--- | :--- |
 | `POSTGRES_DB` | `photogallery` | Имя базы данных PostgreSQL |
 | `POSTGRES_USER` | `photouser` | Пользователь базы данных |
-| `POSTGRES_PASSWORD` | `photosecret` | Пароль базы данных (обязательно смените на проде!) |
-| `DATABASE_URL` | `postgres://...` | DSN-строка подключения к БД |
+| `POSTGRES_PASSWORD` | `photosecret` | Пароль базы данных (обязательно задайте надёжный!) |
+| `DATABASE_URL` | `postgres://...` | DSN-строка подключения к PostgreSQL |
 | `PORT` | `8080` | Внутренний порт Go API |
 | `APP_PORT` | `80` (локально) / `8080` (прод) | Порт Nginx, пробрасываемый на хост |
 | `APP_BIND_IP` | `0.0.0.0` (локально) / `127.0.0.1` | Сетевой интерфейс привязки портов |
+| `ADMIN_USERNAME` | `admin` | Логин начального администратора |
+| `ADMIN_PASSWORD` | `admin123` | Пароль администратора (синхронизируется с БД при старте) |
 | `JWT_SECRET` | `photogallery_...` | Секретный ключ подписи JWT (от 32 символов) |
 | `COOKIE_SECURE` | `false` (локально) / `true` (HTTPS) | Флаг Secure для сессионных кук |
 | `UPLOAD_DIR` | `/uploads` | Внутренний каталог хранения снимков в контейнере |
 | `MAX_UPLOAD_SIZE` | `20971520` | Максимальный размер загружаемого файла (20 МБ) |
-| `PHOTOS_STORAGE_PATH` | `./uploads` | **Путь на хосте/диске** для хранения файлов |
+| `PHOTOS_STORAGE_PATH` | `./uploads` | **Путь на хосте/диске** для хранения файлов фото |
 | `CORS_ALLOWED_ORIGINS`| `""` | Список доверенных доменов через запятую (для HTTPS) |
 
 ---
 
-## 🌐 Развёртывание на продакшене (HTTPS & Поддомен)
+## 🚀 Развёртывание на продакшене (HTTPS & Поддомен)
 
-Для запуска на сервере под отдельным поддоменом (например, `photos.yourdomain.com`) за внешним хостовым Nginx с SSL-сертификатом от Let's Encrypt:
+Схема работы: Внешний Nginx сервера принимает HTTPS трафик с SSL-сертификатом Let's Encrypt и проксирует его на локальный порт контейнера `127.0.0.1:8080` (`photo_nginx`).
 
-### 1. Настройка `.env` на сервере
+### 1. Подготовка окружения на сервере
+Клонируйте репозиторий и создайте рабочий `.env`:
+```bash
+git clone https://github.com/LiveIsAbsurd/PhotoAbsurd.git PhotoService
+cd PhotoService
+cp .env.example .env
+nano .env
+```
+
+Заполните ваши боевые настройки:
 ```env
 APP_BIND_IP=127.0.0.1
 APP_PORT=8080
 COOKIE_SECURE=true
-CORS_ALLOWED_ORIGINS=https://photos.yourdomain.com
+CORS_ALLOWED_ORIGINS=https://photo.yourdomain.com
 PHOTOS_STORAGE_PATH=/mnt/storage/photos
-JWT_SECRET=super_secret_jwt_random_string_32_chars!
-POSTGRES_PASSWORD=your_strong_postgres_password
-DATABASE_URL=postgres://photouser:your_strong_postgres_password@postgres:5432/photogallery?sslmode=disable
+JWT_SECRET=сгенерируйте_случайную_строку_от_32_символов
+POSTGRES_PASSWORD=сложный_пароль_базы_данных
+DATABASE_URL=postgres://photouser:сложный_пароль_базы_данных@postgres:5432/photogallery?sslmode=disable
+ADMIN_USERNAME=ваш_логин_админа
+ADMIN_PASSWORD=ваш_надежный_пароль_админа
 ```
 
-### 2. Хранение фото на отдельном диске
-Если снимки должны лежать на отдельном смонтированном диске:
+### 2. Права на каталог хранилища
+Если снимки хранятся на отдельном диске или в отдельной папке:
 ```bash
 sudo mkdir -p /mnt/storage/photos
 sudo chmod 777 /mnt/storage/photos
 ```
 
-### 3. Конфигурация хостового Nginx (`/etc/nginx/sites-available/photos.yourdomain.com`)
+### 3. Конфигурация внешнего Nginx на хосте (`/etc/nginx/sites-available/photo.yourdomain.com`)
 ```nginx
 server {
     listen 80;
-    server_name photos.yourdomain.com;
+    server_name photo.yourdomain.com;
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name photos.yourdomain.com;
+    server_name photo.yourdomain.com;
 
-    ssl_certificate /etc/letsencrypt/live/photos.yourdomain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/photos.yourdomain.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/photo.yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/photo.yourdomain.com/privkey.pem;
 
     client_max_body_size 25M;
 
@@ -204,24 +195,66 @@ server {
 }
 ```
 
+Активируйте конфиг и перезапустите системный Nginx:
+```bash
+sudo ln -s /etc/nginx/sites-available/photo.yourdomain.com /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+### 4. Запуск контейнеров
+```bash
+sudo docker compose up --build -d
+```
+
+---
+
+## 🔄 Обновление проекта на сервере
+
+Благодаря тому, что фронтенд компилируется заранее, а Nginx использует официальный образ:
+```bash
+# 1. Загружаем свежие коммиты
+git pull
+
+# 2. Пересобираем бэкенд и перезапускаем сервисы
+sudo docker compose up --build -d
+```
+
+---
+
+## 🛠️ Полезные команды обслуживания
+
+- **Проверить логи любого сервиса:**
+  ```bash
+  sudo docker compose logs -f backend
+  sudo docker compose logs -f photo_nginx
+  ```
+- **Посмотреть пользователей в базе данных:**
+  ```bash
+  sudo docker compose exec postgres psql -U photouser -d photogallery -c "SELECT id, username, role, created_at FROM users;"
+  ```
+- **Сбросить пароль администратора:**
+  Измените `ADMIN_PASSWORD` в файле `.env` и примените изменения:
+  ```bash
+  sudo docker compose up -d backend
+  ```
+  *(Бэкенд автоматически проверит и обновит хеш пароля в базе данных при старте).*
+
 ---
 
 ## 👑 Панель управления и роли
 
-В системе предусмотрена двухуровневая модель доступа:
-
 1. **Администратор (Куратор):**
-   - Управление авторами (создание, удаление пользователей, сброс паролей).
-   - Управление любыми альбомами и переключение их публичности.
-   - Удаление любых неподобающих фотографий.
-   - Доступ к скрытым/приватным снимкам и коллекциям.
+   - Управление авторами (создание новых пользователей, сброс паролей).
+   - Управление альбомами и их видимостью.
+   - Загрузка, редактирование и удаление любых снимков.
+   - Просмотр приватных коллекций.
 2. **Автор (User):**
    - Загрузка авторских фотографий с автоматическим извлечением параметров съемки.
-   - Создание персональных коллекций и управление доступом к ним.
+   - Создание персональных коллекций.
    - Редактирование и удаление собственных работ.
 
 ---
 
 ## 📄 Лицензия
 
-Проект распространяется под лицензией **MIT**. Подробности в файле `LICENSE` (при наличии).
+Проект распространяется под лицензией **MIT**.
