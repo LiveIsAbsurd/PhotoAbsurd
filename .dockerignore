@@ -1,0 +1,20 @@
+# Git
+.git
+.gitignore
+
+# Environment variables
+.env
+.env.*
+
+# Dependencies & Build artifacts
+node_modules
+frontend/node_modules
+frontend/dist
+dist
+
+# Uploads
+uploads
+photo_uploads
+
+# Logs
+*.log

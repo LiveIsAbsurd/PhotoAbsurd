@@ -108,7 +108,7 @@ PhotoService/
 
 ### Предварительные требования
 - Установленный [Docker](https://docs.docker.com/get-docker/) и [Docker Compose](https://docs.docker.com/compose/)
-- [Node.js 18+](https://nodejs.org/) (для сборки фронтенда)
+*(Node.js на сервере не требуется — фронтенд и бэкенд компилируются внутри Docker-контейнеров).*
 
 ### 1. Клонирование и настройка окружения
 ```bash
@@ -119,15 +119,7 @@ cd PhotoService
 cp .env.example .env
 ```
 
-### 2. Сборка фронтенда
-```bash
-cd frontend
-npm install
-npm run build
-cd ..
-```
-
-### 3. Запуск контейнеров
+### 2. Запуск контейнеров
 ```bash
 docker compose up --build -d
 ```
