@@ -385,9 +385,10 @@ export default function App() {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '16px 24px',
-            backgroundColor: 'var(--color-bg-alt, #fafafa)',
-            borderBottom: '1px solid var(--color-border-light, #f0f0f0)',
-            color: 'var(--color-text-primary, #111111)',
+            backgroundColor: 'var(--bg-alt)',
+            borderBottom: '1px solid var(--border-light)',
+            color: 'var(--text-primary)',
+            transition: 'background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease',
           }}
         >
           <div>
@@ -396,7 +397,7 @@ export default function App() {
                 fontSize: '10px',
                 fontWeight: 700,
                 letterSpacing: '2px',
-                color: 'var(--color-text-muted, #888)',
+                color: 'var(--text-muted)',
               }}
             >
               КОЛЛЕКЦИЯ /
@@ -420,11 +421,14 @@ export default function App() {
               fontWeight: 700,
               letterSpacing: '1.5px',
               textTransform: 'uppercase',
-              color: 'var(--color-text-secondary, #666)',
+              color: 'var(--text-secondary)',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
+              transition: 'opacity 0.2s ease',
             }}
+            onMouseEnter={(mouseEvent) => (mouseEvent.currentTarget.style.opacity = '0.6')}
+            onMouseLeave={(mouseEvent) => (mouseEvent.currentTarget.style.opacity = '1')}
           >
             ✕ ВСЕ ФОТОГРАФИИ
           </button>
@@ -439,9 +443,10 @@ export default function App() {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '16px 24px',
-            backgroundColor: 'var(--color-bg-alt, #fafafa)',
-            borderBottom: '1px solid var(--color-border-light, #f0f0f0)',
-            color: 'var(--color-text-primary, #111111)',
+            backgroundColor: 'var(--bg-alt)',
+            borderBottom: '1px solid var(--border-light)',
+            color: 'var(--text-primary)',
+            transition: 'background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease',
           }}
         >
           <div>
@@ -450,7 +455,7 @@ export default function App() {
                 fontSize: '10px',
                 fontWeight: 700,
                 letterSpacing: '2px',
-                color: 'var(--color-text-muted, #888)',
+                color: 'var(--text-muted)',
               }}
             >
               ПУБЛИКАТОР /
@@ -474,11 +479,14 @@ export default function App() {
               fontWeight: 700,
               letterSpacing: '1.5px',
               textTransform: 'uppercase',
-              color: 'var(--color-text-secondary, #666)',
+              color: 'var(--text-secondary)',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
+              transition: 'opacity 0.2s ease',
             }}
+            onMouseEnter={(mouseEvent) => (mouseEvent.currentTarget.style.opacity = '0.6')}
+            onMouseLeave={(mouseEvent) => (mouseEvent.currentTarget.style.opacity = '1')}
           >
             ✕ ВСЕ ФОТОГРАФИИ
           </button>

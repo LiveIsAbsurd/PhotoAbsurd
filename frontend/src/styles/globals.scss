@@ -13,6 +13,13 @@
   --border-color: #e5e5e5;
   --border-light: #f0f0f0;
 
+  // Алиасы для совместимости
+  --color-bg-alt: var(--bg-alt);
+  --color-border-light: var(--border-light);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
   // Кнопки основного действия в светлой теме
   --btn-primary-bg: #111111;
   --btn-primary-text: #ffffff;
