@@ -42,11 +42,9 @@ services:
     networks:
       - photo_network
 
-  nginx:
-    build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
-    container_name: photo_nginx
+  photo-nginx:
+    image: nginx:latest
+    container_name: photo-nginx
     restart: unless-stopped
     ports:
       - "${APP_BIND_IP:-0.0.0.0}:${APP_PORT:-80}:80"
@@ -54,6 +52,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - "${PHOTOS_STORAGE_PATH:-./uploads}:/uploads:ro"
+      - ./frontend/dist:/usr/share/nginx/html:ro
     depends_on:
       - backend
     networks:
