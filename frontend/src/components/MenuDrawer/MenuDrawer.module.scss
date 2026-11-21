@@ -1,0 +1,285 @@
+@import '../../styles/variables';
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: $z-drawer;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.drawer {
+  width: 100%;
+  max-width: 380px;
+  height: 100%;
+  background-color: $bg-modal;
+  color: $text-primary;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.25);
+  animation: slideLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  border-bottom: 1px solid $border-light;
+}
+
+.menuLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $text-primary;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $text-primary;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.closeText {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav {
+  flex: 1;
+  padding: 32px 28px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.navSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.createAlbumLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-secondary;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $text-primary;
+  }
+}
+
+.emptyNotice {
+  font-size: 12px;
+  color: $text-muted;
+  font-style: italic;
+  padding: 4px 0;
+}
+
+.sectionTitle {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $text-muted;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-secondary;
+  padding: 8px 0;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $text-primary;
+
+    .navItemTitle {
+      transform: translateX(4px);
+      color: $text-primary;
+    }
+  }
+
+  &.active {
+    color: $text-primary;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+}
+
+.navItemTitle {
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: $bg-alt;
+  color: $text-secondary;
+  flex-shrink: 0;
+}
+
+.actionItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $btn-primary-text;
+  background-color: $btn-primary-bg;
+  border: 1px solid $btn-primary-border;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: $btn-primary-hover-bg;
+    color: $btn-primary-hover-text;
+    transform: scale(1.02);
+  }
+}
+
+.adminItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-primary;
+  background-color: $bg-alt;
+  border: 1px solid $border-color;
+  padding: 13px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $text-primary;
+    background-color: $border-color;
+  }
+}
+
+.footer {
+  padding: 24px 28px;
+  border-top: 1px solid $border-light;
+  background-color: $bg-alt;
+}
+
+.authBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid $border-color;
+  background-color: $bg-modal;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-primary;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $btn-primary-border;
+    background-color: $btn-primary-bg;
+    color: $btn-primary-text;
+  }
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: $text-muted;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: $text-primary;
+}
+
+.logoutBtn {
+  padding: 8px;
+  border-radius: 50%;
+  color: $text-secondary;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: $color-accent;
+  }
+}

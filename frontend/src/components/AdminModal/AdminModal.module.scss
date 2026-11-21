@@ -1,0 +1,479 @@
+@import '../../styles/variables';
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: $z-modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  background-color: $bg-modal;
+  color: $text-primary;
+  border: 1px solid $border-color;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid $border-light;
+}
+
+.tabsBar {
+  display: flex;
+  gap: 24px;
+  padding: 0 24px;
+  border-bottom: 1px solid $border-light;
+  background-color: $bg-alt;
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-muted;
+  background: none;
+  border: none;
+  padding: 14px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $text-primary;
+  }
+
+  &.activeTab {
+    color: $text-primary;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: $text-primary;
+    }
+  }
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $text-primary;
+}
+
+.title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.closeBtn {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.content {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-muted;
+  margin-bottom: 16px;
+}
+
+.createForm {
+  background-color: $bg-alt;
+  padding: 20px;
+  border: 1px solid $border-light;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 140px;
+  gap: 12px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-muted;
+}
+
+.input, .select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid $border-color;
+  background-color: $bg-input;
+  font-family: inherit;
+  font-size: 13px;
+  color: $text-primary;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: $text-primary;
+  }
+}
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  font-size: 12px;
+}
+
+.successBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  font-size: 12px;
+}
+
+.submitBtn {
+  padding: 12px;
+  background-color: $btn-primary-bg;
+  color: $btn-primary-text;
+  border: 1px solid $btn-primary-border;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: $btn-primary-hover-bg;
+    color: $btn-primary-hover-text;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.usersList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.emptyUsers {
+  padding: 24px 16px;
+  background-color: $bg-alt;
+  border: 1px dashed $border-color;
+  text-align: center;
+  font-size: 12px;
+  color: $text-secondary;
+}
+
+.userRowContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-modal;
+  border: 1px solid $border-light;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: $border-color;
+  }
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+.userActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.keyBtn {
+  color: $text-muted;
+  padding: 6px;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    color: $text-primary;
+    background-color: $bg-alt;
+  }
+
+  &.activeKeyBtn {
+    color: $text-primary;
+    background-color: $bg-alt;
+  }
+}
+
+.changePasswordRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 12px 16px;
+  border-top: 1px dashed $border-light;
+  background-color: $bg-alt;
+}
+
+.passwordInput {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 12px;
+  background-color: $bg-modal;
+  color: $text-primary;
+  border: 1px solid $border-light;
+  outline: none;
+
+  &:focus {
+    border-color: $border-color;
+  }
+}
+
+.savePasswordBtn {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: $btn-primary-bg;
+  color: $btn-primary-text;
+  border: 1px solid $btn-primary-border;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.cancelPasswordBtn {
+  padding: 6px 10px;
+  font-size: 11px;
+  background: none;
+  color: $text-muted;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    color: $text-primary;
+  }
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.roleBadge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background-color: $bg-alt;
+  color: $text-secondary;
+
+  &.adminBadge {
+    background-color: $btn-primary-bg;
+    color: $btn-primary-text;
+    border: 1px solid $btn-primary-border;
+  }
+}
+
+.deleteBtn {
+  color: $text-muted;
+  padding: 6px;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    color: $color-accent;
+    background-color: rgba(239, 68, 68, 0.15);
+  }
+}
+
+.albumRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background-color: $bg-modal;
+  border: 1px solid $border-light;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: $border-color;
+  }
+}
+
+.albumMainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.albumTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.albumTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: $text-primary;
+}
+
+.albumPhotoCount {
+  font-size: 10px;
+  color: $text-muted;
+  text-transform: uppercase;
+}
+
+.albumDesc {
+  font-size: 12px;
+  color: $text-secondary;
+}
+
+.albumActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.accessBadge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 12px;
+
+  &.public {
+    background-color: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+  }
+
+  &.restricted {
+    background-color: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+  }
+}
+
+.toggleAccessBtn {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  background-color: $bg-alt;
+  border: 1px solid $border-color;
+  color: $text-primary;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $text-primary;
+    background-color: $btn-primary-bg;
+    color: $btn-primary-text;
+  }
+}
+
+.deleteAlbumBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ef4444;
+  background: none;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+  }
+}

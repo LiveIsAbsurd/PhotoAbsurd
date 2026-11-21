@@ -1,0 +1,207 @@
+@import '../../styles/variables';
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: $z-modal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  background-color: $bg-modal;
+  color: $text-primary;
+  border: 1px solid $border-color;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid $border-light;
+}
+
+.title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: $text-primary;
+}
+
+.closeBtn {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.body {
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.authPrompt {
+  font-size: 13px;
+  color: $text-secondary;
+  line-height: 1.6;
+}
+
+.form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dropZone {
+  border: 1.5px dashed $border-color;
+  background-color: $bg-alt;
+  padding: 36px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $text-primary;
+    background-color: $bg-input;
+  }
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.uploadIcon {
+  color: $text-muted;
+  margin-bottom: 12px;
+}
+
+.dropText {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-primary;
+  margin-bottom: 4px;
+}
+
+.dropSubtext {
+  font-size: 11px;
+  color: $text-muted;
+}
+
+.fileList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.filesCount {
+  font-size: 12px;
+  font-weight: 700;
+  color: $text-primary;
+}
+
+.fileNames {
+  font-size: 11px;
+  color: $text-secondary;
+  max-width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $text-muted;
+}
+
+.input, .select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid $border-color;
+  background-color: $bg-input;
+  font-family: inherit;
+  font-size: 13px;
+  color: $text-primary;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: $text-primary;
+  }
+}
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background-color: #fff0f0;
+  border: 1px solid #ffd6d6;
+  color: #d32f2f;
+  font-size: 12px;
+}
+
+.successBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background-color: #f0fff4;
+  border: 1px solid #c6f6d5;
+  color: #2f855a;
+  font-size: 12px;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 14px;
+  background-color: $btn-primary-bg;
+  color: $btn-primary-text;
+  border: 1px solid $btn-primary-border;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: $btn-primary-hover-bg;
+    color: $btn-primary-hover-text;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

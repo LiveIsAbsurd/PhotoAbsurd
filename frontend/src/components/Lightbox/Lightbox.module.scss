@@ -1,0 +1,204 @@
+@import '../../styles/variables';
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(10, 10, 10, 0.96);
+  z-index: $z-lightbox;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(12px);
+  user-select: none;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.counter {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff6b6b;
+  opacity: 0.85;
+  transition: opacity 0.2s, transform 0.15s;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.deleteText {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.closeText {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 60px;
+
+  @media (max-width: 640px) {
+    padding: 10px 16px;
+  }
+}
+
+.imageContainer {
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullImage {
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-50%) scale(1.05);
+  }
+}
+
+.prevBtn {
+  left: 16px;
+}
+
+.nextBtn {
+  right: 16px;
+}
+
+.bottomBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  color: #ffffff;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.metaInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.authorSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.authorName {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.views {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.exifDetails {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.5px;
+}
+
+.cameraIcon {
+  opacity: 0.7;
+}
+
+.likeBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition: background 0.2s, transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.24);
+    transform: scale(1.06) translateZ(0);
+  }
+
+  &.liked {
+    background: #ffffff;
+    color: $color-accent;
+  }
+}

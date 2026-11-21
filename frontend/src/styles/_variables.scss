@@ -1,0 +1,34 @@
+// Дизайн-токены и переменные тем оформления
+$font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+// CSS-переменные для динамического переключения Light / Dark темы
+$bg-color: var(--bg-color);
+$bg-alt: var(--bg-alt);
+$bg-card: var(--bg-card);
+$bg-modal: var(--bg-modal);
+$bg-header: var(--bg-header);
+$bg-input: var(--bg-input);
+
+$text-primary: var(--text-primary);
+$text-secondary: var(--text-secondary);
+$text-muted: var(--text-muted);
+$border-color: var(--border-color);
+$border-light: var(--border-light);
+
+// Кнопки основного действия
+$btn-primary-bg: var(--btn-primary-bg);
+$btn-primary-text: var(--btn-primary-text);
+$btn-primary-border: var(--btn-primary-border);
+$btn-primary-hover-bg: var(--btn-primary-hover-bg);
+$btn-primary-hover-text: var(--btn-primary-hover-text);
+
+$color-dark: #0a0a0a;
+$color-accent: #e53935; // Красный цвет для отметок "Нравится"
+
+$transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+$transition-fast: all 0.15s ease-out;
+
+$z-header: 100;
+$z-drawer: 200;
+$z-modal: 300;
+$z-lightbox: 400;
