@@ -63,7 +63,6 @@ func (database *DB) AutoMigrate(executionContext context.Context) error {
 		ALTER TABLE users ALTER COLUMN email DROP NOT NULL;
 		ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) NOT NULL DEFAULT 'user';
 		ALTER TABLE users ADD COLUMN IF NOT EXISTS token_version INT NOT NULL DEFAULT 1;
-		UPDATE users SET role = 'admin' WHERE username = 'test_curator';
 		CREATE INDEX IF NOT EXISTS idx_likes_user_created ON likes(user_id, created_at DESC);
 		CREATE INDEX IF NOT EXISTS idx_photos_public_created ON photos(created_at DESC) WHERE is_public = TRUE;
 		CREATE TABLE IF NOT EXISTS revoked_tokens (
@@ -72,10 +71,7 @@ func (database *DB) AutoMigrate(executionContext context.Context) error {
 			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 		);
 		CREATE INDEX IF NOT EXISTS idx_revoked_tokens_expires ON revoked_tokens(expires_at);
-		UPDATE users 
-		SET password_hash = '!LOCKED_DEMO_ACCOUNT_PASSWORD_SET_VIA_ADMIN' 
-		WHERE username = 'demo_user' 
-		  AND password_hash = '$2a$12$Z0E0rM1y5H3W8j2L6n1X6.R3mF8wQ7vA9pD5sK2tL1mN4oP7qR9s.';
+		DELETE FROM users WHERE username = 'demo_user';
 	`
 	_, migrationError := database.Pool.Exec(executionContext, migrationQueries)
 	return migrationError
