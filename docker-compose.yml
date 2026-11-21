@@ -42,9 +42,9 @@ services:
     networks:
       - photo_network
 
-  photo-nginx:
+  photo_nginx:
     image: nginx:latest
-    container_name: photo-nginx
+    container_name: photo_nginx
     restart: unless-stopped
     ports:
       - "${APP_BIND_IP:-0.0.0.0}:${APP_PORT:-80}:80"
