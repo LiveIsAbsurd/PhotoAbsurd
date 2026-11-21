@@ -23,14 +23,30 @@ export default function Header({
 }) {
   return (
     <header className={styles.header}>
-      {/* Левая часть: текстовый логотип */}
+      {/* Левая часть: текстовый логотип со значком */}
       <div className={styles.left}>
         <button className={styles.brand} onClick={onLogoClick}>
-          ГАЛЕРЕЯ
+          <svg
+            className={styles.brandIcon}
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="3.5" y="3.5" width="17" height="17" rx="3.5" stroke="currentColor" strokeWidth="1.6" />
+            <circle cx="6.5" cy="6.5" r="1.1" fill="currentColor" />
+            <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" />
+            <circle cx="6.5" cy="17.5" r="1.1" fill="currentColor" />
+            <circle cx="17.5" cy="17.5" r="1.1" fill="currentColor" />
+            <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.6" />
+            <circle cx="12" cy="12" r="1.6" fill="currentColor" />
+          </svg>
+          <span>ГАЛЕРЕЯ</span>
         </button>
       </div>
 
-      {/* Центральная часть: минималистичная векторная эмблема */}
+      {/* Центральная часть: авторская эмблема кадра плёнки */}
       <div className={styles.center} onClick={onLogoClick} title="На главную">
         <svg
           className={styles.emblem}
@@ -40,15 +56,13 @@ export default function Header({
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <circle cx="12" cy="9" r="6" stroke="currentColor" strokeWidth="1.8" />
-          <circle cx="12" cy="9" r="2.2" fill="currentColor" />
-          <path
-            d="M7 19L9.5 16.5L12 18.5L14.5 16.5L17 19"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <rect x="3.5" y="3.5" width="17" height="17" rx="3.5" stroke="currentColor" strokeWidth="1.6" />
+          <circle cx="6.5" cy="6.5" r="1.1" fill="currentColor" />
+          <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" />
+          <circle cx="6.5" cy="17.5" r="1.1" fill="currentColor" />
+          <circle cx="17.5" cy="17.5" r="1.1" fill="currentColor" />
+          <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.6" />
+          <circle cx="12" cy="12" r="1.6" fill="currentColor" />
         </svg>
       </div>
 

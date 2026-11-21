@@ -129,16 +129,29 @@
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: $text-primary;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.2s;
 
   &:hover {
     opacity: 0.7;
   }
+}
+
+.brandIcon {
+  color: $text-primary;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.brand:hover .brandIcon {
+  transform: scale(1.05);
 }
 
 .emblem {
