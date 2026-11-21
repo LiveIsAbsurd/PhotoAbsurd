@@ -12,10 +12,12 @@ import (
 	"github.com/go-chi/chi/v5"
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/google/uuid"
 
 	"photogallery/internal/config"
 	"photogallery/internal/handler"
 	"photogallery/internal/middleware"
+	"photogallery/internal/model"
 	"photogallery/internal/repository"
 	"photogallery/internal/service"
 )
@@ -51,6 +53,9 @@ func main() {
 	photoRepository := repository.NewPhotoRepository(database)
 	albumRepository := repository.NewAlbumRepository(database)
 	likeRepository := repository.NewLikeRepository(database)
+
+	// Инициализация учётной записи администратора при первом запуске (если ещё не существует)
+	initAdminAccount(rootContext, userRepository, authService, appConfig)
 
 	// 6. Инициализация промежуточных обработчиков (Middleware)
 	appMiddleware := middleware.NewMiddleware(authService, userRepository, appConfig.CookieSecure)
@@ -183,4 +188,45 @@ func main() {
 	}
 
 	log.Println("Сервер успешно остановлен. Все ресурсы освобождены.")
+}
+
+// initAdminAccount гарантирует наличие учётной записи администратора в базе данных.
+// Если администратора с логином appConfig.AdminUsername ещё нет, он создаётся автоматически.
+func initAdminAccount(ctx context.Context, userRepo *repository.UserRepository, authService *service.AuthService, appConfig *config.Config) {
+	adminUsername := appConfig.AdminUsername
+	if adminUsername == "" {
+		adminUsername = "admin"
+	}
+
+	existingUser, err := userRepo.GetByUsername(ctx, adminUsername)
+	if err == nil && existingUser != nil {
+		return
+	}
+
+	adminPassword := appConfig.AdminPassword
+	if adminPassword == "" {
+		adminPassword = "admin"
+	}
+
+	hashedPassword, err := authService.HashPassword(adminPassword)
+	if err != nil {
+		log.Printf("[ERROR] Не удалось захэшировать пароль администратора: %v", err)
+		return
+	}
+
+	adminUser := &model.User{
+		ID:           uuid.New(),
+		Username:     adminUsername,
+		PasswordHash: hashedPassword,
+		Role:         "admin",
+		TokenVersion: 1,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+	}
+
+	if err := userRepo.Create(ctx, adminUser); err != nil {
+		log.Printf("[ERROR] Ошибка создания начального администратора: %v", err)
+	} else {
+		log.Printf("[SECURITY] Успешно инициализирован администратор: %s", adminUsername)
+	}
 }

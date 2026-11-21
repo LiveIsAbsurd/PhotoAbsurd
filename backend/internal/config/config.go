@@ -16,6 +16,8 @@ type Config struct {
 	CookieSecure       bool     // Флаг Secure для cookies (true при использовании HTTPS, false для локального HTTP)
 	MaxUploadSize      int64    // Максимальный размер загружаемого файла в байтах (20 МБ)
 	CORSAllowedOrigins []string // Дополнительные разрешённые домены для CORS (например, https://photos.example.com)
+	AdminUsername      string   // Логин начального администратора (по умолчанию "admin")
+	AdminPassword      string   // Пароль начального администратора (по умолчанию "admin123")
 }
 
 // Load считывает переменные окружения операционной системы и возвращает заполненную конфигурацию.
@@ -51,6 +53,9 @@ func Load() *Config {
 		}
 	}
 
+	adminUsername := getEnvironmentVariable("ADMIN_USERNAME", "admin")
+	adminPassword := getEnvironmentVariable("ADMIN_PASSWORD", "admin123")
+
 	return &Config{
 		Port:               serverPort,
 		DatabaseURL:        databaseConnectionURL,
@@ -59,6 +64,8 @@ func Load() *Config {
 		CookieSecure:       isCookieSecure,
 		MaxUploadSize:      maxUploadSizeBytes,
 		CORSAllowedOrigins: corsAllowedOrigins,
+		AdminUsername:      adminUsername,
+		AdminPassword:      adminPassword,
 	}
 }
 
