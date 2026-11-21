@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -58,6 +59,8 @@ func (handlerInstance *AuthHandler) Login(responseWriter http.ResponseWriter, ht
 		sendJSONResponse(responseWriter, http.StatusBadRequest, map[string]string{"error": "некорректный формат JSON"})
 		return
 	}
+
+	loginPayload.Username = strings.TrimSpace(loginPayload.Username)
 
 	if loginPayload.Username == "" || loginPayload.Password == "" {
 		sendJSONResponse(responseWriter, http.StatusBadRequest, map[string]string{"error": "логин и пароль обязательны для заполнения"})

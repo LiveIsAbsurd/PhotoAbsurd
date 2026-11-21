@@ -22,7 +22,7 @@ export default function AuthModal({ isModalOpen, onCloseModal, onAuthenticationS
     setErrorMessage(null);
 
     try {
-      const authenticatedUser = await authenticateUser(usernameInput, passwordInput);
+      const authenticatedUser = await authenticateUser(usernameInput.trim(), passwordInput);
       onAuthenticationSuccess(authenticatedUser);
       onCloseModal();
     } catch (authError) {
