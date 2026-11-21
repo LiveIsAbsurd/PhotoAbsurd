@@ -40,7 +40,11 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - photo_network
+      photo_network:
+        aliases:
+          - backend
+          - photo_backend
+          - photo-backend
 
   photo_nginx:
     image: nginx:latest
