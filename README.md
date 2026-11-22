@@ -50,7 +50,7 @@
 - **Стилизация:** SCSS (CSS Modules), CSS Custom Properties для бесшовной смены тем (Light / Dark)
 - **Иконки:** [Lucide React](https://lucide.dev/)
 - **Особенности:** Zero-dependency подход, адаптивная верстка (Mobile / Tablet / Desktop / Ultra-wide).
-- **Сборка:** Скомпилированный продакшн-билд (`frontend/dist`) хранится в репозитории — на сервере **не требуются** Node.js и npm.
+- **Сборка:** Автоматическая двухэтапная (multi-stage) компиляция внутри Docker-контейнера `node:20-alpine` — на хосте/сервере **не требуются** Node.js и npm.
 
 ### Backend
 - **Язык:** [Go 1.22](https://go.dev/)
@@ -69,7 +69,7 @@
 - **Docker Compose:** изолированная среда из трёх сервисов:
   - `photo_postgres` — база данных PostgreSQL 16 Alpine с постоянным volume `postgres_data`.
   - `photo_backend` — скомпилированный Go REST API микросервис.
-  - `photo_nginx` — официальный образ `nginx:latest`, отдающий статику SPA, медиафайлы и проксирующий `/api/`.
+  - `photo_nginx` — мультистейдж Nginx контейнер (собирает React фронтенд через Node.js и отдаёт статику, медиафайлы и проксирует `/api/`).
 - **Nginx архитектура:**
   - Внутренний DNS-резолвер (`resolver 127.0.0.11`) с динамическим апстримом предотвращает падение Nginx при старте или перезапуске бэкенда.
   - Прямой кэширующий стриминг медиафайлов из `/media/` с заголовками `Cache-Control: public, max-age=30d, immutable` в обход Go-бэкенда.

@@ -3,9 +3,11 @@
 .env.local
 .env.*.local
 
-# Node modules
+# Node modules & build artifacts
 node_modules/
 frontend/node_modules/
+frontend/dist/
+dist/
 
 # Uploads & local storage
 uploads/*
