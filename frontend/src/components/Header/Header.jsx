@@ -23,25 +23,9 @@ export default function Header({
 }) {
   return (
     <header className={styles.header}>
-      {/* Левая часть: текстовый логотип со значком */}
+      {/* Левая часть: текстовый логотип*/}
       <div className={styles.left}>
         <button className={styles.brand} onClick={onLogoClick}>
-          <svg
-            className={styles.brandIcon}
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect x="3.5" y="3.5" width="17" height="17" rx="3.5" stroke="currentColor" strokeWidth="1.6" />
-            <circle cx="6.5" cy="6.5" r="1.1" fill="currentColor" />
-            <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" />
-            <circle cx="6.5" cy="17.5" r="1.1" fill="currentColor" />
-            <circle cx="17.5" cy="17.5" r="1.1" fill="currentColor" />
-            <circle cx="12" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.6" />
-            <circle cx="12" cy="12" r="1.6" fill="currentColor" />
-          </svg>
           <span>ГАЛЕРЕЯ</span>
         </button>
       </div>
